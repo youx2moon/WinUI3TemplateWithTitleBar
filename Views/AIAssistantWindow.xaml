@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window
+    x:Class="$safeprojectname$.Views.AIAssistantWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:$safeprojectname$.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:$safeprojectname$.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="AIアシスタント"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--  チャット表示 (ネイティブListView)  -->
+            <ListView
+                x:Name="ChatListView"
+                Grid.Row="0"
+                Margin="0,0,0,12"
+                SelectionMode="None"
+                ShowsScrollingPlaceholders="True">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Padding" Value="0,4" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:ChatMessage">
+                        <!--  MessageMargin を使って反対側に空間を確保  -->
+                        <Grid Margin="{x:Bind MessageMargin}" HorizontalAlignment="{x:Bind Alignment}">
+
+                            <!--  【ユーザー用レイアウト】 TextBlock を使用  -->
+                            <Border
+                                Padding="12,8"
+                                Background="{x:Bind Background}"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8,16,0,16"
+                                Visibility="{Binding IsUser, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <TextBlock
+                                    FontSize="14"
+                                    Foreground="{x:Bind Foreground}"
+                                    Text="{x:Bind Text}"
+                                    TextWrapping="Wrap" />
+                            </Border>
+
+                            <!--  【AI回答用レイアウト】 RichTextBlock を使用  -->
+                            <Border
+                                Padding="12,8"
+                                Background="{x:Bind Background}"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="16,8,16,0"
+                                Visibility="{Binding IsAi, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <RichTextBlock
+                                    DataContext="{x:Bind}"
+                                    DataContextChanged="MessageBlock_DataContextChanged"
+                                    FontSize="14"
+                                    Foreground="{x:Bind Foreground}"
+                                    IsTextSelectionEnabled="True"
+                                    TextWrapping="Wrap" />
+                            </Border>
+
+                            <!--  【AI考え中(スケルトン)表示】  -->
+                            <Border
+                                Width="200"
+                                Padding="12,8"
+                                Background="{ThemeResource LayerFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="12"
+                                Visibility="{Binding IsLoading, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <StackPanel Spacing="8">
+                                    <Rectangle
+                                        Height="12"
+                                        Fill="{ThemeResource SystemFillColorAttentionBackgroundBrush}"
+                                        Loaded="Skeleton_Loaded"
+                                        Opacity="1"
+                                        RadiusX="4"
+                                        RadiusY="4" />
+                                    <Rectangle
+                                        Width="120"
+                                        Height="12"
+                                        HorizontalAlignment="Left"
+                                        Fill="{ThemeResource SystemFillColorAttentionBackgroundBrush}"
+                                        Loaded="Skeleton_Loaded"
+                                        Opacity="1"
+                                        RadiusX="4"
+                                        RadiusY="4" />
+                                </StackPanel>
+                            </Border>
+
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!--  入力エリア  -->
+            <Grid Grid.Row="1" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox
+                    x:Name="TxtInput"
+                    Grid.Column="0"
+                    Height="80"
+                    Margin="0,0,8,0"
+                    AcceptsReturn="True"
+                    PlaceholderText="質問を入力するか、マイクボタンで話しかけてください"
+                    TextWrapping="Wrap" />
+
+                <!--  ボタンを縦に並べるためのStackPanel  -->
+                <StackPanel
+                    Grid.Column="1"
+                    VerticalAlignment="Bottom"
+                    Spacing="4">
+                    <!--  マイクボタン (音声入力)  -->
+                    <ToggleButton
+                        x:Name="BtnMic"
+                        Width="80"
+                        Height="38"
+                        Click="BtnMic_Click"
+                        ToolTipService.ToolTip="音声入力">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon
+                                x:Name="MicIcon"
+                                FontSize="16"
+                                Glyph="&#xEC71;" />
+                            <TextBlock Text="音声" />
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <!--  送信ボタン  -->
+                    <Button
+                        x:Name="BtnSend"
+                        Width="80"
+                        Height="38"
+                        Click="BtnSend_Click"
+                        Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon
+                                FontSize="16"
+                                Glyph="&#xEA64;" />
+                            <TextBlock Text="送信" />
+                        </StackPanel>
+                        </Button>
+                </StackPanel>
+            </Grid>
+            <!--  フッターエリア  -->
+            <Grid Grid.Row="2">
+                <HyperlinkButton
+                    Padding="0"
+                    Click="LnkReport_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="14" Glyph="&#xE730;" />
+                        <TextBlock Text="不適切な回答を報告する" />
+                    </StackPanel>
+                </HyperlinkButton>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

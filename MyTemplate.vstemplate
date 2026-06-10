@@ -1,0 +1,72 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>WinUI 3 TitleBar (Mica &amp; AI)</Name>
+    <Description>タイトルバー、Mica背景、AIアシスタント機能を標準装備したWinUI3テンプレート</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>WinUIApp</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <CreateInPlace>true</CreateInPlace>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="WinUI3TitleBar.csproj" File="WinUI3TitleBar.csproj" ReplaceParameters="true">
+      <Folder Name="Assets" TargetFolderName="Assets">
+        <ProjectItem ReplaceParameters="false" TargetFileName="MainWindow.ico">MainWindow.ico</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="LockScreenLogo.scale-200.png">LockScreenLogo.scale-200.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SplashScreen.scale-200.png">SplashScreen.scale-200.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="Square150x150Logo.scale-200.png">Square150x150Logo.scale-200.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="Square44x44Logo.scale-200.png">Square44x44Logo.scale-200.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="Square44x44Logo.targetsize-24_altform-unplated.png">Square44x44Logo.targetsize-24_altform-unplated.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="StoreLogo.png">StoreLogo.png</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="Wide310x150Logo.scale-200.png">Wide310x150Logo.scale-200.png</ProjectItem>
+      </Folder>
+      <Folder Name="Converters" TargetFolderName="Converters">
+        <ProjectItem ReplaceParameters="true" TargetFileName="BoolToVisibilityConverter.cs">BoolToVisibilityConverter.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="EnumToVisibilityConverter.cs">EnumToVisibilityConverter.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Models" TargetFolderName="Models">
+        <ProjectItem ReplaceParameters="true" TargetFileName="GeminiModel.cs">GeminiModel.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="launchSettings.json">launchSettings.json</ProjectItem>
+        <Folder Name="PublishProfiles" TargetFolderName="PublishProfiles">
+          <ProjectItem ReplaceParameters="false" TargetFileName="win-arm64.pubxml">win-arm64.pubxml</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="win-x64.pubxml">win-x64.pubxml</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="win-x86.pubxml">win-x86.pubxml</ProjectItem>
+        </Folder>
+      </Folder>
+      <Folder Name="Services" TargetFolderName="Services">
+        <ProjectItem ReplaceParameters="true" TargetFileName="EncryptionService.cs">EncryptionService.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="MarkdownHelper.cs">MarkdownHelper.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="ProjectJsonContext.cs">ProjectJsonContext.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="RegistrySettings.cs">RegistrySettings.cs</ProjectItem>
+      </Folder>
+      <Folder Name="ViewModels" TargetFolderName="ViewModels">
+        <ProjectItem ReplaceParameters="true" TargetFileName="MainViewModel.cs">MainViewModel.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Views" TargetFolderName="Views">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AIAssistantWindow.xaml">AIAssistantWindow.xaml</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="AIAssistantWindow.xaml.cs">AIAssistantWindow.xaml.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="HomePage.xaml">HomePage.xaml</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="HomePage.xaml.cs">HomePage.xaml.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="NewProjectDialog.xaml">NewProjectDialog.xaml</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="NewProjectDialog.xaml.cs">NewProjectDialog.xaml.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="SettingsPage.xaml">SettingsPage.xaml</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="SettingsPage.xaml.cs">SettingsPage.xaml.cs</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="app.manifest">app.manifest</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.xaml">App.xaml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="App.xaml.cs">App.xaml.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="MainWindow.xaml">MainWindow.xaml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="MainWindow.xaml.cs">MainWindow.xaml.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="obfuscar.xml">obfuscar.xml</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Package.appxmanifest">Package.appxmanifest</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

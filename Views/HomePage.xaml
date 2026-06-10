@@ -1,0 +1,128 @@
+<Page
+    x:Class="$safeprojectname$.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="12">
+        <StackPanel
+            Margin="0,50,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Spacing="20">
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Image
+                    Grid.Column="0"
+                    Width="128"
+                    Height="128"
+                    Source="ms-appx:///Assets/MainWindow.ico" />
+                <Grid Grid.Column="1" VerticalAlignment="Bottom">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource TitleTextBlockStyle}"
+                        Text="$safeprojectname$" />
+                    <TextBlock
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{x:Bind ViewModel.AppVersion, Mode=OneWay}" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Margin="0,15,0,5"
+                        HorizontalAlignment="Center"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="copyright © You Tukishima." />
+                    <TextBlock
+                        Grid.Row="3"
+                        Margin="0,0,0,10"
+                        HorizontalAlignment="Center"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="This product is protected by copyright law." />
+                </Grid>
+            </Grid>
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="18"
+                Text="Line RichiMenu プロジェクトの管理" />
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button
+                    Width="150"
+                    Height="100"
+                    Command="{x:Bind ViewModel.NewProjectCommand}"
+                    Content="新規プロジェクト">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <SymbolIcon
+                                    Height="40"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Symbol="Add">
+                                    <SymbolIcon.RenderTransform>
+                                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                    </SymbolIcon.RenderTransform>
+                                </SymbolIcon>
+                                <TextBlock Text="新規作成" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+                <Button
+                    Width="150"
+                    Height="100"
+                    Command="{x:Bind ViewModel.OpenProjectCommand}"
+                    Content="開く">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <SymbolIcon
+                                    Height="40"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Symbol="Folder">
+                                    <SymbolIcon.RenderTransform>
+                                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                    </SymbolIcon.RenderTransform>
+                                </SymbolIcon>
+                                <TextBlock Text="開く" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+                <Button
+                    Width="150"
+                    Height="100"
+                    Command="{x:Bind ViewModel.SaveProjectCommand}"
+                    Content="保存"
+                    IsEnabled="{x:Bind ViewModel.IsProjectModified, Mode=OneWay}">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <SymbolIcon
+                                    Height="40"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Symbol="Save">
+                                    <SymbolIcon.RenderTransform>
+                                        <ScaleTransform ScaleX="1.5" ScaleY="1.5" />
+                                    </SymbolIcon.RenderTransform>
+                                </SymbolIcon>
+                                <TextBlock Text="保存" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

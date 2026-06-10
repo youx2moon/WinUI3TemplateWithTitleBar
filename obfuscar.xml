@@ -1,0 +1,48 @@
+<?xml version='1.0'?>
+<Obfuscator>
+  <Var name="InPath" value="." />
+  <Var name="OutPath" value=".\Obfuscated" />
+
+  <Var name="KeepPublicApi" value="true" />
+  <Var name="HidePrivateApi" value="true" />
+  <Var name="RenameProperties" value="false" />
+  <Var name="RenameMethods" value="true" />
+  <!-- ★メソッド名のリネームを有効化 -->
+  <Var name="RenameTypes" value="true" />
+  <!-- ★型のリネームを有効化 -->
+  <Var name="RenameFields" value="false" />
+  <Var name="RenameEvents" value="false" />
+
+  <Var name="ControlFlowObfuscation" value="true" />
+  <Var name="HideStrings" value="true" />
+  <!-- ★文字列の隠蔽を有効化 -->
+  <Var name="UseUnicodeNames" value="false" />
+  <!-- ★Unicodeは使わず a, b, c を使う -->
+  <Var name="Optimize" value="true" />
+
+  <Module file="$(InPath)\$safeprojectname$.dll">
+    <!-- 
+      名前空間レベルで「外側」を守り、
+      内部のロジック層だけを「スキップ対象外」にする。
+    -->
+    <SkipNamespace name="$safeprojectname$" />
+    <SkipNamespace name="$safeprojectname$.Views" />
+    <SkipNamespace name="$safeprojectname$.ViewModels" />
+    <SkipNamespace name="$safeprojectname$.Models" />
+    <SkipNamespace name="$safeprojectname$.Converters" />
+    <SkipNamespace name="$safeprojectname$.$safeprojectname$_XamlTypeInfo" />
+
+    <!-- 
+      Services 名前空間はスキップしないことで、
+      内部にある internal クラスや private メソッドがリネーム対象になります。
+    -->
+    <SkipType name="$safeprojectname$.Services.ProjectJsonContext" />
+
+    <!-- 
+      【文字列隠蔽の保護】
+      XAMLのパスなど、実行時に解決できなくなると困る文字列を保護します。
+    -->
+    <SkipString IsRegex="true" name="^ms-appx:///.*" />
+    <SkipString IsRegex="true" name="^$safeprojectname$.*" />
+  </Module>
+</Obfuscator>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentDialog
+    x:Class="$safeprojectname$.Views.NewProjectDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Name="RootDialog"
+    Title="新しいプロジェクトを構成します"
+    CloseButtonText="キャンセル(C)"
+    DefaultButton="Primary"
+    PrimaryButtonText="作成(M)">
+    <!--  名前を付けてコントロールを参照しやすくする  -->
+
+    <StackPanel
+        Width="500"
+        Margin="0,10,0,0"
+        Spacing="20">
+        <!--  プロジェクト名：初期値は空白  -->
+        <TextBox
+            x:Name="ProjectNameEntry"
+            Header="プロジェクト名(J)"
+            PlaceholderText="プロジェクト名を入力してください"
+            Text=""
+            TextChanged="UpdatePathPreview" />
+
+        <!--  場所の選択  -->
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox
+                x:Name="LocationEntry"
+                VerticalAlignment="Bottom"
+                Header="場所(L)"
+                IsReadOnly="True"
+                TextChanged="UpdatePathPreview" />
+            <Button
+                Grid.Column="1"
+                Width="40"
+                VerticalAlignment="Bottom"
+                Click="BrowseButton_Click"
+                Content="..." />
+        </Grid>
+
+        <StackPanel Spacing="4">
+            <!--  フォルダ重複警告：赤字で表示  -->
+            <TextBlock
+                x:Name="WarningMessage"
+                Foreground="Red"
+                Text="⚠️ 同名のフォルダが既に存在します"
+                Visibility="Collapsed" />
+
+            <!--  プレビュー表示  -->
+            <TextBlock
+                x:Name="PathPreview"
+                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                TextWrapping="Wrap" />
+        </StackPanel>
+    </StackPanel>
+</ContentDialog>

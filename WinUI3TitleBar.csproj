@@ -1,0 +1,139 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>$safeprojectname$</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x86;x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <PublishProfile>win-$(Platform).pubxml</PublishProfile>
+    <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <!--
+    Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
+    Tools extension to be activated for this project even if the Windows App SDK Nuget
+    package has not yet been restored.
+  -->
+  <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+    <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.1839" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.2.0" />
+  </ItemGroup>
+
+  <!--
+    Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
+    Explorer "Package and Publish" context menu entry to be enabled for this project even if
+    the Windows App SDK Nuget package has not yet been restored.
+  -->
+  <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+    <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
+  </PropertyGroup>
+
+    <!-- Publish Properties -->
+  <PropertyGroup>
+    <PublishReadyToRun Condition="'$(Configuration)' == 'Debug'">False</PublishReadyToRun>
+    <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
+    <PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
+    <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
+    <ApplicationIcon>Assets\MainWindow.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="WinUI3$safeprojectname$.vstemplate" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.4.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3967.48" />
+    <PackageReference Include="Obfuscar" Version="2.2.50">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <!-- 難読化およびMSIXパッケージ用DLL差し替えタスク (Releaseビルド時のみ実行) -->
+  <Target Name="ObfuscarTask" AfterTargets="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <!-- Obfuscarのパス設定 -->
+      <ObfuscarExe>$(PkgObfuscar)\tools\Obfuscar.Console.exe</ObfuscarExe>
+
+      <!-- 難読化されたDLLの出力先 -->
+      <ObfSource>$(TargetDir)Obfuscated\$safeprojectname$.dll</ObfSource>
+
+      <!-- パッケージング時にVSが参照する各種ディレクトリ -->
+      <MsixPublishDir>$(TargetDir)msixpublish\</MsixPublishDir>
+      <MsixObjDir>$(IntermediateOutputPath)</MsixObjDir>
+
+      <!-- 現在のターゲット（win-x64等）に応じたobj内のランタイムディレクトリ -->
+      <MsixObjRuntimeDir>$(IntermediateOutputPath)$(RuntimeIdentifier)\</MsixObjRuntimeDir>
+    </PropertyGroup>
+
+    <Message Importance="high" Text="[Obfuscar] 難読化プロセスを開始します..." />
+
+    <!-- 1. 前回の難読化済みファイルをクリアして実行 -->
+    <RemoveDir Directories="$(TargetDir)Obfuscated" />
+    <MakeDir Directories="$(TargetDir)Obfuscated" />
+    <Exec WorkingDirectory="$(TargetDir)" Command="&quot;$(ObfuscarExe)&quot; &quot;$(ProjectDir)obfuscar.xml&quot;" />
+
+    <!-- 2. 標準出力ディレクトリ (bin) を上書き -->
+    <Copy SourceFiles="$(ObfSource)" DestinationFolder="$(TargetDir)" OverwriteReadOnlyFiles="true" Retries="5" RetryDelayMilliseconds="1000" />
+
+    <!-- 3. 中間出力ディレクトリ (obj) を上書き -->
+    <Copy Condition="Exists('$(MsixObjDir)')" SourceFiles="$(ObfSource)" DestinationFolder="$(MsixObjDir)" OverwriteReadOnlyFiles="true" Retries="5" RetryDelayMilliseconds="1000" />
+
+    <!-- 4. 【重要】MSIXの真のソースとなる obj\...\win-x64 等を上書き -->
+    <Message Importance="high" Text="[Obfuscar] MSIXパッケージソースを上書き中: $(MsixObjRuntimeDir)" />
+    <Copy Condition="Exists('$(MsixObjRuntimeDir)')" SourceFiles="$(ObfSource)" DestinationFolder="$(MsixObjRuntimeDir)" OverwriteReadOnlyFiles="true" Retries="5" RetryDelayMilliseconds="1000" />
+
+    <!-- 5. 公開用一時ディレクトリ (msixpublish) を上書き -->
+    <Copy Condition="Exists('$(MsixPublishDir)')" SourceFiles="$(ObfSource)" DestinationFolder="$(MsixPublishDir)" OverwriteReadOnlyFiles="true" Retries="5" RetryDelayMilliseconds="1000" />
+
+    <Message Importance="high" Text="[SUCCESS] 難読化された dll を全てのパッケージングソースに適用しました。($(RuntimeIdentifier))" />
+  </Target>
+  <Target Name="PostClean" AfterTargets="Clean">
+    <!-- /bin を削除 -->
+    <RemoveDir Directories="$(BaseOutputPath)" />
+    <!-- /obj を削除 -->
+    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+    <!-- (Package)/AppPackages を削除 -->
+    <RemoveDir Directories="$(SolutionDir)$(ProjectName)/AppPackages" />
+  </Target>
+</Project>
