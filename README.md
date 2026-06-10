@@ -66,4 +66,4 @@ This template architecture is actively used in the following production applicat
 
 ## License
 
-This template is licensed under the [MIT License](LICENSE). Feel free to modify and use it for both personal and commercial projects.
+This project is dedicated to the public domain under the [Unlicense](https://unlicense.org/). You can copy, modify, distribute, and perform the work, even for commercial purposes, all without asking permission or providing attribution.
