@@ -12,11 +12,7 @@ public static class RegistrySettings
 
     public static string GeminiApiKey { get; set; } = "";
     public static ElementTheme AppTheme { get; set; } = ElementTheme.Default;
-     public static int NavStyleIndex { get; set; } = 0;
-
-   // 【追加】友だちページ閲覧パスワード
-    public static string FriendViewPassword { get; set; } = "";
-
+    public static int NavStyleIndex { get; set; } = 0;
 
     public static void Save()
     {
@@ -24,8 +20,6 @@ public static class RegistrySettings
         key.SetValue("GeminiApiKey", EncryptionService.Encrypt(GeminiApiKey));
         key.SetValue("AppTheme", (int)AppTheme);
         key.SetValue("NavStyleIndex", NavStyleIndex);
-        // パスワードを暗号化して保存
-        key.SetValue("FriendViewPassword", EncryptionService.Encrypt(FriendViewPassword));
     }
 
     public static void Load()
@@ -36,8 +30,6 @@ public static class RegistrySettings
             GeminiApiKey = EncryptionService.Decrypt(key.GetValue("GeminiApiKey")?.ToString() ?? "");
             AppTheme = (ElementTheme)Convert.ToInt32(key.GetValue("AppTheme", (int)ElementTheme.Default));
             NavStyleIndex = Convert.ToInt32(key.GetValue("NavStyleIndex", 0));
-            // パスワードを復号して読み込み
-            FriendViewPassword = EncryptionService.Decrypt(key.GetValue("FriendViewPassword")?.ToString() ?? "");
         }
     }
 }

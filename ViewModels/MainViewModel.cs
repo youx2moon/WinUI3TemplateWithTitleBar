@@ -1,11 +1,12 @@
 #pragma warning disable MVVMTK0045
 
+using $
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using $safeprojectname$.Services;
+safeprojectname$.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -40,7 +41,7 @@ namespace $safeprojectname$.ViewModels
         [ObservableProperty] private bool _isSimulatorMenuVisible = true;
 
         [ObservableProperty] private bool _isProjectModified = false;
-        [ObservableProperty] private bool _isFriendsModified = false;
+
         public bool IsSettingsChangedInSession { get; set; } = false;
 
         [ObservableProperty] private bool _isLoading = false;
@@ -264,18 +265,16 @@ namespace $safeprojectname$.ViewModels
             // プロジェクトが非アクティブな場合は、確認なしで続行可能
             if (!IsProjectActive || App.MainPageXamlRoot == null) return true;
 
-            // どちらにも変更がない場合は、確認なしで続行可能
+            // 変更がない場合は、確認なしで続行可能
             if (!IsProjectModified) return true;
 
             // すでにダイアログが開いている場合は二重に開かない
             if (App.IsDialogOpen) return false;
 
-            // アプリ終了時と同じ「段階的な確認ロジック」を呼び出して実行します
-            // これにより、要件5, 6, 7に基づいた順序で確認が行われます
             return await ConfirmShutdownAsync(false);
         }
 
-         private void UpdateWindowTitle()
+        private void UpdateWindowTitle()
         {
             if (App.MainWindowInstance is MainWindow mainWindow)
             {

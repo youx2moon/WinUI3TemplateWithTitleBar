@@ -108,28 +108,5 @@ namespace $safeprojectname$.Services
             LicenseManager.LicenseStatus.Trial => "試用版",
             _ => "無料版"
         };
-
-        // エイリアス命名規則
-        public static string GetShortAliasId(string pageId)
-        {
-            string cleanId = pageId.Replace("-", "").ToLower();
-            return $"lml-{cleanId.Substring(0, Math.Min(28, cleanId.Length))}";
-        }
-
-        // 画像フィット計算ロジック
-        public static (double x, double y, int zoom) CalculateCoverFit(double canvasW, double canvasH, double imgW, double imgH)
-        {
-            double ratioW = canvasW / imgW;
-            double ratioH = canvasH / imgH;
-
-            double scale = Math.Max(ratioW, ratioH);
-            double coverRatio = scale * 100 + 0.5;
-
-            double x = -(imgW * scale - canvasW) / 2.0;
-            double y = -(imgH * scale - canvasH) / 2.0;
-            return (x, y, (int)Math.Ceiling(coverRatio));
-        }
-
-
     }
 }

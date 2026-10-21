@@ -176,40 +176,40 @@ namespace $safeprojectname$
             }
         }
 
-        private async void AppWindow_Closing(Microsoft.UI.Windowing.AppWindow sender, Microsoft.UI.Windowing.AppWindowClosingEventArgs args)
+    private async void AppWindow_Closing(Microsoft.UI.Windowing.AppWindow sender, Microsoft.UI.Windowing.AppWindowClosingEventArgs args)
+    {
+        if (_isClosingConfirmed) return;
+        if (ViewModel == null) return;
+
+        if (!ViewModel.IsProjectModified)
         {
-            if (_isClosingConfirmed) return;
-            if (ViewModel == null) return;
+            _isClosingConfirmed = true;
+            Cleanup(); // ここで Cleanup を呼ぶ
+            return;
+        }
 
-            if (!ViewModel.IsProjectModified && !ViewModel.IsFriendsModified)
+        args.Cancel = true;
+        if (App.IsDialogOpen) return;
+
+        try
+        {
+            bool canProceed = await ViewModel.ConfirmShutdownAsync();
+            if (canProceed)
             {
                 _isClosingConfirmed = true;
-                Cleanup(); // ここで Cleanup を呼ぶ
-                return;
-            }
-
-            args.Cancel = true;
-            if (App.IsDialogOpen) return;
-
-            try
-            {
-                bool canProceed = await ViewModel.ConfirmShutdownAsync();
-                if (canProceed)
-                {
-                    _isClosingConfirmed = true;
-                    Cleanup(); // 確定後に呼ぶ
-                    Close();
-                }
-            }
-            catch
-            {
-                _isClosingConfirmed = true;
-                Cleanup();
+                Cleanup(); // 確定後に呼ぶ
                 Close();
             }
         }
+        catch
+        {
+            _isClosingConfirmed = true;
+            Cleanup();
+            Close();
+        }
+    }
 
-        public void Cleanup()
+    public void Cleanup()
         {
             try
             {

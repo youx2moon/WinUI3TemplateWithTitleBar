@@ -415,6 +415,8 @@ namespace $safeprojectname$.Views
                         .Select(m => m.Name)
                         .Where(name => name != null &&
                                      name.Contains("-flash") &&
+                                     !name.Contains("-omni") &&
+                                     !name.Contains("-preview") &&
                                      !name.Contains("-live") &&
                                      !name.Contains("-vision") &&
                                      !name.Contains("-thinking") &&

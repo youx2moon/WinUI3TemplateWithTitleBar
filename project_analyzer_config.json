@@ -1,0 +1,19 @@
+{
+  "projectName": "WinUI3TitleBar",
+  "properties": {
+    "languages": [],
+    "langVersion": "",
+    "isVersionAutoDetected": false,
+    "db": {
+      "type": "None",
+      "version": ""
+    },
+    "useJquery": false,
+    "useJqueryUi": false,
+    "otherInfo": "",
+    "entryPoint": ""
+  },
+  "excludedFolders": [],
+  "databaseInfo": "",
+  "excludedFiles": []
+}

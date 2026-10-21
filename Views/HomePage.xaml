@@ -56,7 +56,7 @@
             <TextBlock
                 HorizontalAlignment="Center"
                 FontSize="18"
-                Text="Line RichiMenu プロジェクトの管理" />
+                Text="$safeprojectname$ プロジェクトの管理" />
             <StackPanel Orientation="Horizontal" Spacing="10">
                 <Button
                     Width="150"
